@@ -1,0 +1,32 @@
+version: "3"
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    volumes:
+      - ./bakend/images:/fastapp_api/backend/src/images
+    env_file:
+      - ./backend/.env
+    ports:
+      - '7340:8000'
+    links:
+      - "postgresql:postgres"
+    stdin_open: true
+    tty: true
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=myusername
+      - POSTGRES_PASSWORD=mypassword
+    ports:
+      - '6000:5432'
+  client:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
